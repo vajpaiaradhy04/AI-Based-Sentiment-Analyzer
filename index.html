@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI-Based Sentiment Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1f1c2c, #928dab);
+            color: #e0e0e0;
+            margin: 40px auto;
+            padding: 20px;
+            max-width: 700px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 30px 40px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #a0c4ff;
+            text-shadow: 0 0 8px #a0c4ff, 0 0 20px #a0c4ff;
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        textarea {
+            width: 90%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 12px;
+            resize: vertical;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.15);
+            color: #f0f0f0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        textarea::placeholder {
+            color: #d0d0d0;
+            opacity: 0.7;
+        }
+
+        textarea:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 12px #a0c4ff inset;
+            border-color: #a0c4ff;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px 30px;
+            font-size: 16px;
+            background: rgba(160, 196, 255, 0.7);
+            color: #121212;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(160, 196, 255, 0.7);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        button:hover {
+            background: rgba(160, 196, 255, 0.9);
+            box-shadow: 0 0 25px #a0c4ff, 0 0 35px #a0c4ff;
+        }
+
+        #result {
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            color: #c0c0c0;
+            text-shadow: 0 0 6px #a0c4ff;
+            transition: color 0.3s ease;
+            min-height: 24px;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            user-select: none;
+            font-style: italic;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        footer:hover {
+            color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="glass-container">
+        <h1>Welcome to the AI-Based Sentiment Analyzer</h1>
+        <form id="sentiment-form">
+            <textarea id="text-input" name="text" placeholder="Enter text here..." rows="5" cols="50"></textarea><br /><br />
+            <button type="submit">Analyze Sentiment</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <footer>aradhy project</footer>
+
+    <script>
+        document.getElementById('sentiment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const text = document.getElementById('text-input').value;
+            document.getElementById('result').innerText = 'Analyzing...';
+
+            fetch('/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('result').innerText = 'Sentiment: ' + data.label;
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                document.getElementById('result').innerText = 'Error: ' + error.message;
+            });
+        });
+    </script>
+</body>
+</html>

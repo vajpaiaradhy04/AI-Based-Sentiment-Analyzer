@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Based Sentiment Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px #4a90e2;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        h1 {
+            text-align: center;
+            color: #4a90e2;
+            text-shadow: 0 0 8px #4a90e2, 0 0 20px #4a90e2;
+        }
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+        textarea {
+            width: 90%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            resize: vertical;
+            box-sizing: border-box;
+            background-color: #222;
+            color: #eee;
+            box-shadow: 0 0 8px #4a90e2 inset;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 12px #6fb3ff inset;
+            border-color: #6fb3ff;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 25px;
+            font-size: 16px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px #4a90e2;
+        }
+        button:hover {
+            background-color: #357abd;
+            box-shadow: 0 0 20px #6fb3ff, 0 0 30px #6fb3ff;
+        }
+        #result {
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            color: #a0a0a0;
+            text-shadow: 0 0 6px #4a90e2;
+            transition: color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the AI-Based Sentiment Analyzer</h1>
+    <h2>its a aradhy project</h2>
+    <form id="sentiment-form">+
+        <textarea id="text-input" name="text" placeholder="Enter text here..." rows="5" cols="50"></textarea><br><br>
+        <button type="submit">Analyze Sentiment</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('sentiment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const text = document.getElementById('text-input').value;
+            document.getElementById('result').innerText = 'Analyzing...';
+
+            fetch('/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('result').innerText = 'Sentiment: ' + data.label;
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                document.getElementById('result').innerText = 'Error: ' + error.message;
+            });
+        });
+    </script>
+</body>
+</html>
